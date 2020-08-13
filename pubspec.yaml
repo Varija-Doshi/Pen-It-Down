@@ -61,10 +61,19 @@ flutter:
     - assets/google_logo.png
 
   fonts:
-    - family: Merriweather
+    - family: Roboto
       fonts:
-        - asset: fonts/Roboto-Medium.ttf       
-
+        - asset: fonts/Roboto-Medium.ttf 
+    - family: Lobster
+      fonts:     
+        - asset: fonts/LobsterTwo-Bold.ttf      
+          weight: 700
+    - family: Title
+      fonts:     
+        - asset: fonts/Sniglet-Regular.ttf
+    - family: Body
+      fonts:     
+        - asset: fonts/FiraSans-Regular.ttf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

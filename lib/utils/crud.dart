@@ -53,8 +53,12 @@ class CrudMethods {
     return Firestore.instance.collection('done').snapshots();
   }
 
-  updateList(selectedDoc, newTodo) {
-    Firestore.instance
+  getPin() async {
+    return Firestore.instance.collection('pin').snapshots();
+  }
+
+  Future updateList(selectedDoc, newTodo) async{
+   await Firestore.instance
         .collection('todos')
         .document(selectedDoc)
         .updateData(newTodo)
@@ -63,8 +67,8 @@ class CrudMethods {
     });
   }
 
-  updateDone(selectedDoc, newTodo) {
-    Firestore.instance
+  Future updateDone(selectedDoc, newTodo) async {
+    await Firestore.instance
         .collection('done')
         .document(selectedDoc)
         .updateData(newTodo)
@@ -76,6 +80,16 @@ class CrudMethods {
   deleteData(docId) {
     Firestore.instance
         .collection('todos')
+        .document(docId)
+        .delete()
+        .catchError((e) {
+      print(e);
+    });
+  }
+
+  deletePin(docId) {
+    Firestore.instance
+        .collection('pin')
         .document(docId)
         .delete()
         .catchError((e) {

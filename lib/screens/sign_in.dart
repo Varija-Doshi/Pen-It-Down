@@ -180,7 +180,7 @@ class SignInState extends State<SignIn> {
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
-                  fontFamily: 'Roboto-Medium' ,
+                  fontFamily: 'Roboto' ,
                 ),
               ),
             )
@@ -202,18 +202,20 @@ class SignInState extends State<SignIn> {
       ),
       child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            SizedBox(height: 240,),
             Text(
               " Welcome ! ",
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 30.0,
-                  fontFamily: 'Roboto-Medium',
+                  fontSize: 40.0,
+                  fontFamily: 'Lobster',
                   ),
               textAlign: TextAlign.center,
             ),
+            SizedBox(height: 30,),
             _buildButton(),
           ],
         ),

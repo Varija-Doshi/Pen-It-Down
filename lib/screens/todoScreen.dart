@@ -4,7 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:Todo_App2/screens/note_editor.dart';
 import 'package:Todo_App2/screens/doneScreen.dart';
 import 'package:Todo_App2/screens/ListScreen.dart';
-import 'package:Todo_App2/screens/pinScreen.dart';
+
 
 
 class Todo {
@@ -43,7 +43,7 @@ class _TodoScreenState extends State<TodoScreen> {
   @override
   void initState() {
 
-    screens = [ListScreen(signOut : widget.signOut),ListScreen(signOut : widget.signOut), PinScreen(signOut : widget.signOut),  DoneScreen(signOut : widget.signOut)];
+    screens = [ListScreen(signOut : widget.signOut),ListScreen(signOut : widget.signOut),  DoneScreen(signOut : widget.signOut)];
     super.initState();
   }
       
@@ -61,7 +61,7 @@ class _TodoScreenState extends State<TodoScreen> {
           items: <Widget>[
             Icon(Icons.list, color: Colors.black, size: 30),
             Icon(Icons.add, color: Colors.black, size: 30),
-            Icon(MdiIcons.pin, color: Colors.black, size: 30),
+            //Icon(MdiIcons.pin, color: Colors.black, size: 30),
             Icon(Icons.check_circle, color: Colors.black, size: 30),
           ],
           onTap: (index) {

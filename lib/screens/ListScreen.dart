@@ -1,3 +1,4 @@
+import 'package:Todo_App2/screens/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -13,16 +14,20 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreenState extends State<ListScreen> {
   Stream notes;
-  bool done, pinned;
+  bool done, pin, pinned = false;
   String title, content;
   CrudMethods crudobj = CrudMethods();
 
-  void checkbox(bool done, String title, String content, docId) {
+  void checkbox(bool done, String title, String content, bool pin, docId) {
+    print("pin $pin");
     if (done) {
       crudobj
-          .doneData(
-              {'title': this.title, 'content': this.content, 'done': true},
-              docId)
+          .doneData({
+            'title': this.title,
+            'content': this.content,
+            'pin': pin,
+            'done': true
+          }, docId)
           .then((value) => null)
           .catchError((e) {
             print(e);
@@ -76,7 +81,9 @@ class _ListScreenState extends State<ListScreen> {
                       shadowColor: Colors.black,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
-                      color: Colors.grey[100],
+                      color: snapshot.data.documents[i].data['pinned']
+                          ? Colors.red[200]
+                          : Colors.white,
                       child: Slidable(
                         child: ListTile(
                           leading: IconButton(
@@ -99,28 +106,33 @@ class _ListScreenState extends State<ListScreen> {
                                     snapshot.data.documents[i].data['title'];
                                 content =
                                     snapshot.data.documents[i].data['content'];
+                                pinned =
+                                    snapshot.data.documents[i].data['pinned'];
                                 var docId =
                                     snapshot.data.documents[i].documentID;
                                 checkbox(
                                   this.done,
                                   this.title,
                                   this.content,
+                                  this.pinned,
                                   docId,
                                 );
                               }),
                           title: Text(
                             snapshot.data.documents[i].data['title'],
                             style: TextStyle(
-                              color: Colors.pinkAccent,
-                              fontSize: 14,
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontFamily: "Title",
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           subtitle: Text(
                             snapshot.data.documents[i].data['content'],
                             style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
+                              color: Colors.grey[700],
+                              fontSize: 16,
+                              fontFamily: "Body",
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -158,6 +170,28 @@ class _ListScreenState extends State<ListScreen> {
                                   snapshot.data.documents[i].documentID);
                             },
                           ),
+                          IconSlideAction(
+                            caption: 'Pin',
+                            color: Colors.purple[200],
+                            icon: snapshot.data.documents[i].data['pinned']
+                                ? MdiIcons.pin
+                                : MdiIcons.pinOutline,
+                            onTap: () {
+                              pinned = !pinned;
+                              crudobj.updateList(
+                                  snapshot.data.documents[i].documentID,
+                                  {'pinned': this.pinned});
+                              /*crudobj.doneData(
+                                  snapshot.data.documents[i].documentID, {
+                                'pin': this.pinned
+                              }).then((_) => print("pin data added to done"));*/
+                              crudobj.updateDone(
+                                  snapshot.data.documents[i].documentID, {
+                                'pin': this.pinned
+                              }).then((_) =>
+                                  print("pin data added to done using func"));
+                            },
+                          )
                         ],
                       ),
                     ),
@@ -194,15 +228,28 @@ class _ListScreenState extends State<ListScreen> {
                         color: Colors.red,
                         size: 30.0,
                       ),
-                      onPressed: widget.signOut),
+                      onPressed: () {
+                        widget.signOut();
+                        Navigator.pop(context);
+                      }),
                   SizedBox(
-                    width: 50.0,
+                    width: 60.0,
+                  ),
+                  Icon(
+                    MdiIcons.note,
+                    color: Colors.yellowAccent[200],
+                    size: 40,
+                  ),
+                  SizedBox(
+                    width: 10.0,
                   ),
                   Text(
-                    "Todos",
+                    "To-do's",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 40.0,
+                      fontFamily: "Lobster",
+                      //fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],

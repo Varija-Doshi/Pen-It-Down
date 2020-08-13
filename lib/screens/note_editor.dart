@@ -20,6 +20,19 @@ class _NoteEditorState extends State<NoteEditor> {
   String title, content, newtitle, newcontent;
   CrudMethods crudobj = new CrudMethods();
 
+  void addPin(
+    bool pin,
+    String title,
+    String content,
+  ) {
+    if (pin)
+      crudobj.pinData(
+          {'title': this.title, 'content': this.content, 'pin': true},
+          widget.selectedDoc);
+    else
+      crudobj.deletePin(widget.selectedDoc);
+  }
+
   Widget _buildNoteDetail() {
     if (widget.update == false) {
       _titleTextController.text = "";
@@ -110,7 +123,7 @@ class _NoteEditorState extends State<NoteEditor> {
                         print(e);
                       });
                 else {
-                  crudobj.doneData(widget.selectedDoc, {
+                  crudobj.updateDone(widget.selectedDoc, {
                     'title': this.newtitle,
                     'content': this.newcontent
                   }).then((_) {
@@ -129,21 +142,6 @@ class _NoteEditorState extends State<NoteEditor> {
                   });
                 }
               }),
-          IconButton(
-            icon: pinned
-                ? Icon(MdiIcons.pin, color: Colors.black)
-                : Icon(
-                    MdiIcons.pinOutline,
-                    color: Colors.grey[600],
-                  ),
-            onPressed: () {
-              pinned = !pinned;
-              crudobj.updateList(widget.selectedDoc, {'pinned': this.pinned});
-              /*setState(() {
-                pinned = !pinned;
-              });*/
-            },
-          ),
         ],
         leading: IconButton(
           icon: Icon(

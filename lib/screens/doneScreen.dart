@@ -16,7 +16,7 @@ class DoneScreen extends StatefulWidget {
 class _DoneScreenState extends State<DoneScreen> {
   Stream done;
   Stream notes;
-  bool checkdone;
+  bool checkdone, pin;
   CrudMethods crudobj = CrudMethods();
   String title, content;
 
@@ -53,7 +53,9 @@ class _DoneScreenState extends State<DoneScreen> {
                     shadowColor: Colors.black,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
-                    color: Colors.grey[100],
+                    color: snapshot.data.documents[i].data['pin']
+                        ? Colors.red[200]
+                        : Colors.white,
                     child: Slidable(
                       child: ListTile(
                         leading: IconButton(
@@ -83,7 +85,8 @@ class _DoneScreenState extends State<DoneScreen> {
                           snapshot.data.documents[i].data['title'],
                           style: TextStyle(
                             color: Colors.pinkAccent,
-                            fontSize: 14,
+                            fontSize: 18,
+                            fontFamily: "Title",
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -91,8 +94,9 @@ class _DoneScreenState extends State<DoneScreen> {
                           snapshot.data.documents[i].data['content'],
                           style: TextStyle(
                             color: Colors.black,
-                            fontSize: 12,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            fontFamily: "Body"
                           ),
                         ),
                         onLongPress: () {
@@ -125,6 +129,28 @@ class _DoneScreenState extends State<DoneScreen> {
                             deleteNotes(docId);
                           },
                         ),
+                        IconSlideAction(
+                          caption: 'Pin',
+                          color: Colors.purple[200],
+                          icon: snapshot.data.documents[i].data['pin']
+                              ? MdiIcons.pin
+                              : MdiIcons.pinOutline,
+                          onTap: () {
+                            pin = snapshot.data.documents[i].data['pin'];
+                            pin = !pin;
+                            print("pin in done screen = $pin");
+                            crudobj.updateList(
+                                snapshot.data.documents[i].documentID,
+                                {'pinned': this.pin}).then((_) {
+                              print("done screen to list screen update");
+                            });
+                            crudobj.updateDone(
+                                snapshot.data.documents[i].documentID,
+                                {'pin': pin}).then((_) {
+                              print("done screen to done screen update");
+                            });
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -161,15 +187,19 @@ class _DoneScreenState extends State<DoneScreen> {
                         color: Colors.red,
                         size: 30.0,
                       ),
-                      onPressed: widget.signOut),
+                      onPressed: () {
+                        widget.signOut();
+                        Navigator.pop(context);
+                      }),
                   SizedBox(
-                    width: 50.0,
+                    width: 40.0,
                   ),
                   Text(
-                    "Compeleted! ",
+                    "Compeleted Work! ",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 25.0,
+                      fontSize: 35.0,
+                      fontFamily: "Lobster",
                     ),
                   ),
                   SizedBox(
@@ -199,16 +229,16 @@ class _DoneScreenState extends State<DoneScreen> {
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height -50,
+              height: MediaQuery.of(context).size.height - 50,
               color: Color(0xFFDDF3F5),
               child: ListView(
                 primary: false,
                 padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                children: <Widget>[ 
-                   Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: _buildList(),
-                    ),
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: _buildList(),
+                  ),
                 ],
               ),
             ),
