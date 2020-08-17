@@ -1,10 +1,13 @@
 import 'package:Todo_App2/screens/todoScreen.dart';
+import 'package:Todo_App2/utils/crud.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert' show json;
-
+import 'package:Todo_App2/utils/userModel.dart';
 import "package:http/http.dart" as http;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -13,7 +16,7 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
     'https://www.googleapis.com/auth/contacts.readonly',
   ],
 );
-
+var userid;
 class SignIn extends StatefulWidget {
   @override
   SignInState createState() => SignInState();
@@ -21,7 +24,9 @@ class SignIn extends StatefulWidget {
 
 class SignInState extends State<SignIn> {
   GoogleSignInAccount _currentUser;
+  FirebaseAuth _auth = FirebaseAuth.instance;
   String _contactText;
+ 
   FlutterToast flutterToast;
 
   Widget signInToast = Container(
@@ -137,9 +142,24 @@ class SignInState extends State<SignIn> {
     return null;
   }
 
+  UserModel _user;
   Future<void> _handleSignIn() async {
     try {
-      await _googleSignIn.signIn();
+      GoogleSignInAccount _googleUser = await _googleSignIn.signIn();
+      GoogleSignInAuthentication _googleAuth = await _googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+          idToken: _googleAuth.idToken, accessToken: _googleAuth.accessToken);
+      AuthResult _authResult = await _auth.signInWithCredential(credential);
+      FirebaseUser currentuser = await _auth.currentUser();
+      userid = currentuser.uid;
+      print("userid in sign in " + userid);
+      if (_authResult.additionalUserInfo.isNewUser) {
+        _user.uid = _authResult.user.uid;
+        _user.fullName = _authResult.user.displayName;
+        _user.email = _authResult.user.email;
+        //CrudMethods(currentUser: _user);
+      }
+
       _showToast1();
       print("Signed in !");
       Navigator.push(
@@ -153,8 +173,9 @@ class SignInState extends State<SignIn> {
     }
   }
 
-  Future<void> handleSignOut() {
-    _googleSignIn.disconnect();
+  Future<void> handleSignOut() async {
+      _googleSignIn.disconnect();
+    _auth.signOut();
     showToast2();
   }
 
@@ -180,7 +201,7 @@ class SignInState extends State<SignIn> {
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
-                  fontFamily: 'Roboto' ,
+                  fontFamily: 'Roboto',
                 ),
               ),
             )
@@ -204,18 +225,22 @@ class SignInState extends State<SignIn> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 240,),
+            SizedBox(
+              height: 240,
+            ),
             Text(
               " Welcome ! ",
               style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 40.0,
-                  fontFamily: 'Lobster',
-                  ),
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 40.0,
+                fontFamily: 'Lobster',
+              ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             _buildButton(),
           ],
         ),

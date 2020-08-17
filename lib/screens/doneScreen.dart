@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:Todo_App2/screens/note_editor.dart';
@@ -15,7 +16,6 @@ class DoneScreen extends StatefulWidget {
 
 class _DoneScreenState extends State<DoneScreen> {
   Stream done;
-  Stream notes;
   bool checkdone, pin;
   CrudMethods crudobj = CrudMethods();
   String title, content;
@@ -39,7 +39,7 @@ class _DoneScreenState extends State<DoneScreen> {
   }
 
   Widget _buildList() {
-    if (done != null) {
+    if (done.isEmpty !=null) {
       return StreamBuilder(
         stream: done,
         builder: (context, snapshot) {
@@ -57,48 +57,7 @@ class _DoneScreenState extends State<DoneScreen> {
                         ? Colors.red[200]
                         : Colors.white,
                     child: Slidable(
-                      child: ListTile(
-                        leading: IconButton(
-                            icon: snapshot.data.documents[i].data['done']
-                                ? Icon(
-                                    Icons.check_circle,
-                                    color: Colors.green,
-                                  )
-                                : Icon(
-                                    Icons.check_circle_outline,
-                                    color: Colors.red,
-                                  ),
-                            onPressed: () {
-                              checkdone =
-                                  snapshot.data.documents[i].data['done'];
-                              checkdone = !checkdone;
-                              crudobj.updateList(
-                                  snapshot.data.documents[i].documentID,
-                                  {'done': this.checkdone});
-                              if (checkdone == false) {
-                                crudobj.deleteDone(
-                                    snapshot.data.documents[i].documentID);
-                                print("done changed to false so must delete");
-                              }
-                            }),
-                        title: Text(
-                          snapshot.data.documents[i].data['title'],
-                          style: TextStyle(
-                            color: Colors.pinkAccent,
-                            fontSize: 18,
-                            fontFamily: "Title",
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        subtitle: Text(
-                          snapshot.data.documents[i].data['content'],
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Body"
-                          ),
-                        ),
+                      child: GestureDetector(
                         onLongPress: () {
                           title = snapshot.data.documents[i].data['title'];
                           content = snapshot.data.documents[i].data['content'];
@@ -110,9 +69,126 @@ class _DoneScreenState extends State<DoneScreen> {
                                       snapshot.data.documents[i].documentID,
                                       title,
                                       content,
+                                      snapshot.data.documents[i].data['date'],
+                                    snapshot.data.documents[i].data['time'],
                                       false)));
                         },
-                        //isThreeLine: true,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  IconButton(
+                                      icon: snapshot
+                                              .data.documents[i].data['done']
+                                          ? Icon(
+                                              Icons.check_circle,
+                                              color: Colors.green,
+                                            )
+                                          : Icon(
+                                              Icons.check_circle_outline,
+                                              color: Colors.red,
+                                            ),
+                                      onPressed: () {
+                                        checkdone = snapshot
+                                            .data.documents[i].data['done'];
+                                        checkdone = !checkdone;
+                                        crudobj.updateList(
+                                            snapshot
+                                                .data.documents[i].documentID,
+                                            {'done': this.checkdone});
+                                        if (checkdone == false) {
+                                          crudobj.deleteDone(snapshot
+                                              .data.documents[i].documentID);
+                                          print(
+                                              "done changed to false so must delete");
+                                        }
+                                      }),
+                                  Text(
+                                    snapshot.data.documents[i].data['title'],
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontFamily: "Title",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(children: <Widget>[
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: Colors.purple,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                 snapshot.data.documents[i].data['date'],
+                                  style: TextStyle(
+                                    color: Colors.grey[700],
+                                    fontSize: 16,
+                                    fontFamily: "Body",
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ]),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Icon(
+                                    Icons.timer,
+                                    color: Colors.purple,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    snapshot.data.documents[i].data['time'],
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontSize: 16,
+                                      fontFamily: "Body",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(children: <Widget>[
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text(
+                                  snapshot.data.documents[i].data['content'],
+                                  style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Body"),
+                                ),
+                              ]),
+                            ],
+                          ),
+                        ),
                       ),
                       actionPane: SlidableDrawerActionPane(),
                       closeOnScroll: true,
@@ -192,7 +268,7 @@ class _DoneScreenState extends State<DoneScreen> {
                         Navigator.pop(context);
                       }),
                   SizedBox(
-                    width: 40.0,
+                    width: 10.0,
                   ),
                   Text(
                     "Compeleted Work! ",
@@ -201,9 +277,10 @@ class _DoneScreenState extends State<DoneScreen> {
                       fontSize: 35.0,
                       fontFamily: "Lobster",
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    width: 10,
+                    width: 5,
                   ),
                   Icon(
                     MdiIcons.emoticonExcited,

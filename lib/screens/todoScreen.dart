@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:Todo_App2/screens/note_editor.dart';
 import 'package:Todo_App2/screens/doneScreen.dart';
-import 'package:Todo_App2/screens/ListScreen.dart';
+import 'package:Todo_App2/screens/ListScreen1.dart';
 
 
 
@@ -30,7 +30,7 @@ class _TodoScreenState extends State<TodoScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => NoteEditor(false, null, "", "", false)));
+            builder: (context) => NoteEditor(false, null, "", "", "Not set","Not set",false)));
   }
 
   
@@ -43,7 +43,7 @@ class _TodoScreenState extends State<TodoScreen> {
   @override
   void initState() {
 
-    screens = [ListScreen(signOut : widget.signOut),ListScreen(signOut : widget.signOut),  DoneScreen(signOut : widget.signOut)];
+    screens = [ListScreen1(signOut : widget.signOut),ListScreen1(signOut : widget.signOut),  DoneScreen(signOut : widget.signOut)];
     super.initState();
   }
       

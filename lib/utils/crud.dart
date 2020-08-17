@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:Todo_App2/screens/sign_in.dart';
+import 'package:Todo_App2/utils/userModel.dart';
 
 class CrudMethods {
+  //UserModel currentUser;
+  String uid = userid;
+
   bool isLoggedin() {
     if (FirebaseAuth.instance.currentUser() != null) {
       return true;
@@ -9,9 +14,18 @@ class CrudMethods {
       return false;
   }
 
+  getuid() async {
+    var user = await FirebaseAuth.instance.currentUser();
+    print("firebase user" + user.uid);
+    //print("get uid " + uid);
+  }
+
   Future<void> addData(todo) async {
+    getuid();
     if (isLoggedin()) {
-      Firestore.instance.collection('todos').add(todo).catchError((e) {
+      Firestore.instance.collection("todos").add(todo).then((_) {
+        // print(uid);
+      }).catchError((e) {
         print(e);
       });
     } else {
@@ -20,24 +34,14 @@ class CrudMethods {
   }
 
   Future<void> doneData(data, docId) async {
+    //var firebaseUser = await FirebaseAuth.instance.currentUser();
     if (isLoggedin()) {
       Firestore.instance
           .collection('done')
           .document(docId)
-          .setData(data, merge: true ).then((_){}).catchError((e) {
-        print(e);
-      });
-    } else {
-      print("You need to be logged in");
-    }
-  }
-
-  Future<void> pinData(data, docId) async {
-    if (isLoggedin()) {
-      Firestore.instance
-          .collection('pin')
-          .document(docId)
-          .setData(data, merge: true ).then((_){}).catchError((e) {
+          .setData(data, merge: true)
+          .then((_) {})
+          .catchError((e) {
         print(e);
       });
     } else {
@@ -46,19 +50,23 @@ class CrudMethods {
   }
 
   getData() async {
-    return Firestore.instance.collection('todos').snapshots();
+    return Firestore.instance
+        .collection('todos')
+        .where('uid', isEqualTo: uid)
+        .orderBy('pinned', descending: true)
+        .snapshots();
   }
 
   getdone() async {
-    return Firestore.instance.collection('done').snapshots();
+    return Firestore.instance
+        .collection('done').where('uid', isEqualTo: uid)
+        .orderBy('pin', descending: true)
+        .snapshots();
   }
 
-  getPin() async {
-    return Firestore.instance.collection('pin').snapshots();
-  }
 
-  Future updateList(selectedDoc, newTodo) async{
-   await Firestore.instance
+  Future updateList(selectedDoc, newTodo) async {
+    await Firestore.instance
         .collection('todos')
         .document(selectedDoc)
         .updateData(newTodo)
@@ -80,16 +88,6 @@ class CrudMethods {
   deleteData(docId) {
     Firestore.instance
         .collection('todos')
-        .document(docId)
-        .delete()
-        .catchError((e) {
-      print(e);
-    });
-  }
-
-  deletePin(docId) {
-    Firestore.instance
-        .collection('pin')
         .document(docId)
         .delete()
         .catchError((e) {

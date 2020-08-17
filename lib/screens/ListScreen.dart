@@ -57,23 +57,6 @@ class _ListScreenState extends State<ListScreen> {
           return ListView.builder(
               itemCount: snapshot.data.documents.length,
               itemBuilder: (context, int i) {
-                if (snapshot.data.documents[i] == null)
-                  return Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Text(
-                          "Please wait Loading",
-                          style: TextStyle(color: Colors.black, fontSize: 30.0),
-                        ),
-                        Icon(
-                          MdiIcons.loading,
-                          size: 25.0,
-                        ),
-                      ],
-                    ),
-                  );
-                else
                   return Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Card(
@@ -233,7 +216,7 @@ class _ListScreenState extends State<ListScreen> {
                         Navigator.pop(context);
                       }),
                   SizedBox(
-                    width: 60.0,
+                    width: 40.0,
                   ),
                   Icon(
                     MdiIcons.note,
