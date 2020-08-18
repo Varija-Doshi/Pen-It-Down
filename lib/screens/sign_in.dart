@@ -16,7 +16,8 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
     'https://www.googleapis.com/auth/contacts.readonly',
   ],
 );
-var userid;
+var userid, photoUrl, displayname;
+
 class SignIn extends StatefulWidget {
   @override
   SignInState createState() => SignInState();
@@ -26,7 +27,7 @@ class SignInState extends State<SignIn> {
   GoogleSignInAccount _currentUser;
   FirebaseAuth _auth = FirebaseAuth.instance;
   String _contactText;
- 
+
   FlutterToast flutterToast;
 
   Widget signInToast = Container(
@@ -152,13 +153,9 @@ class SignInState extends State<SignIn> {
       AuthResult _authResult = await _auth.signInWithCredential(credential);
       FirebaseUser currentuser = await _auth.currentUser();
       userid = currentuser.uid;
+      photoUrl = currentuser.photoUrl;
+      displayname = currentuser.displayName;
       print("userid in sign in " + userid);
-      if (_authResult.additionalUserInfo.isNewUser) {
-        _user.uid = _authResult.user.uid;
-        _user.fullName = _authResult.user.displayName;
-        _user.email = _authResult.user.email;
-        //CrudMethods(currentUser: _user);
-      }
 
       _showToast1();
       print("Signed in !");
@@ -174,7 +171,7 @@ class SignInState extends State<SignIn> {
   }
 
   Future<void> handleSignOut() async {
-      _googleSignIn.disconnect();
+    _googleSignIn.disconnect();
     _auth.signOut();
     showToast2();
   }

@@ -6,6 +6,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:Todo_App2/screens/note_editor.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:Todo_App2/utils/crud.dart';
+import 'sign_in.dart';
 
 class DoneScreen extends StatefulWidget {
   final Function signOut;
@@ -257,36 +258,50 @@ class _DoneScreenState extends State<DoneScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  IconButton(
-                      icon: Icon(
-                        Icons.power_settings_new,
-                        color: Colors.red,
-                        size: 30.0,
-                      ),
-                      onPressed: () {
-                        widget.signOut();
-                        Navigator.pop(context);
-                      }),
                   SizedBox(
-                    width: 10.0,
+                    width: 10,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(photoUrl),
+                        radius: 25.0,
+                      ),
+                      Text(displayname , style: TextStyle(fontSize: 19 , color: Colors.white),)
+                    ],
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width/6-10,
                   ),
                   Text(
-                    "Compeleted Work! ",
+                    "Done !!",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 35.0,
+                      fontSize: 40.0,
                       fontFamily: "Lobster",
                     ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    width: 5,
+                    width:  MediaQuery.of(context).size.width/4 -10,
                   ),
-                  Icon(
-                    MdiIcons.emoticonExcited,
-                    color: Colors.yellow[500],
-                    size: 27.0,
-                  ),
+                   Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      IconButton(
+                      icon: Icon(
+                        MdiIcons.login,
+                        color: Colors.red,
+                        size: 40.0,
+                      ),
+                      onPressed: () {
+                        widget.signOut();
+                        Navigator.pop(context);
+                      }),
+                      Text("Logout" ,style: TextStyle(fontSize: 19 , fontWeight: FontWeight.w600 , color: Colors.white)),
+                      ],
+                  )
                 ],
               ),
             ),

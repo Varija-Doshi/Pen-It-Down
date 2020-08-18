@@ -3,6 +3,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:Todo_App2/screens/note_editor.dart';
 import 'package:Todo_App2/utils/crud.dart';
+import 'sign_in.dart';
 
 class ListScreen1 extends StatefulWidget {
   final Function signOut;
@@ -14,10 +15,10 @@ class ListScreen1 extends StatefulWidget {
 class _ListScreenState1 extends State<ListScreen1> {
   Stream notes;
   bool done, pin, pinned = false;
-  String title, content , date , time, uid;
+  String title, content, date, time, uid;
   CrudMethods crudobj = CrudMethods();
 
-  void checkbox( done, uid , title,  content, date , time , pin, docId) {
+  void checkbox(done, uid, title, content, date, time, pin, docId) {
     print("pin $pin");
     if (done) {
       crudobj
@@ -26,9 +27,9 @@ class _ListScreenState1 extends State<ListScreen1> {
             'content': this.content,
             'pin': pin,
             'done': true,
-            'date': date ,
-            'time': time ,
-            'uid':uid ,
+            'date': date,
+            'time': time,
+            'uid': uid,
           }, docId)
           .then((value) => null)
           .catchError((e) {
@@ -101,19 +102,21 @@ class _ListScreenState1 extends State<ListScreen1> {
                                         snapshot.data.documents[i].documentID,
                                         title,
                                         content,
-                                         snapshot.data.documents[i].data['date'],
-                                          snapshot.data.documents[i].data['time'],
+                                        snapshot.data.documents[i].data['date'],
+                                        snapshot.data.documents[i].data['time'],
                                         true)));
                           },
                           child: Container(
-                            decoration:BoxDecoration(
+                            decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20.0),
-                              ),
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                SizedBox(height: 5,),
+                                SizedBox(
+                                  height: 5,
+                                ),
                                 Row(
                                   children: <Widget>[
                                     IconButton(
@@ -150,8 +153,10 @@ class _ListScreenState1 extends State<ListScreen1> {
                                             this.uid,
                                             this.title,
                                             this.content,
-                                            snapshot.data.documents[i].data['date'],
-                                            snapshot.data.documents[i].data['time'],
+                                            snapshot
+                                                .data.documents[i].data['date'],
+                                            snapshot
+                                                .data.documents[i].data['time'],
                                             this.pinned,
                                             docId,
                                           );
@@ -167,46 +172,78 @@ class _ListScreenState1 extends State<ListScreen1> {
                                     ),
                                   ],
                                 ),
-                                Row(children: <Widget>[
-                                  SizedBox(width: 20,),
-                                  Icon(Icons.calendar_today  , color: Colors.purple,),
-                                  SizedBox(width: 10,),
-                                  Text(
-                                  snapshot.data.documents[i].data['date'] ,
-                                  style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 16,
-                                    fontFamily: "Body",
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),],),
-                                SizedBox(height: 10,) ,
-                                Row(children: <Widget>[
-                                  SizedBox(width: 20,),
-                                  Icon(Icons.timer  , color: Colors.purple,),
-                                  SizedBox(width: 10,),
-                                  Text(
-                                  snapshot.data.documents[i].data['time'],
-                                  style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 16,
-                                    fontFamily: "Body",
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),],),
-                                SizedBox(height: 10,) ,
-                                Row(children: <Widget>[
-                                  SizedBox(width: 20,),
-                                  Text(
-                                  snapshot.data.documents[i].data['content'],
-                                  style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 16,
-                                    fontFamily: "Body",
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),],),
-                                SizedBox(height: 5,)
+                                Row(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Icon(
+                                      Icons.calendar_today,
+                                      color: Colors.purple,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      snapshot.data.documents[i].data['date'],
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontSize: 16,
+                                        fontFamily: "Body",
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Icon(
+                                      Icons.timer,
+                                      color: Colors.purple,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      snapshot.data.documents[i].data['time'],
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontSize: 16,
+                                        fontFamily: "Body",
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      snapshot
+                                          .data.documents[i].data['content'],
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontSize: 16,
+                                        fontFamily: "Body",
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                )
                               ],
                             ),
                           ),
@@ -281,26 +318,22 @@ class _ListScreenState1 extends State<ListScreen1> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  IconButton(
-                      icon: Icon(
-                        Icons.power_settings_new,
-                        color: Colors.red,
-                        size: 30.0,
+                   SizedBox(
+                    width: 20.0,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(photoUrl),
+                        radius: 25.0,
                       ),
-                      onPressed: () {
-                        widget.signOut();
-                        Navigator.pop(context);
-                      }),
-                  SizedBox(
-                    width: 40.0,
-                  ),
-                  Icon(
-                    MdiIcons.note,
-                    color: Colors.yellowAccent[200],
-                    size: 40,
+                      Text(displayname , style: TextStyle(fontSize: 19),)
+                    ],
                   ),
                   SizedBox(
-                    width: 10.0,
+                    width: 50.0,
                   ),
                   Text(
                     "To-do's",
@@ -312,6 +345,24 @@ class _ListScreenState1 extends State<ListScreen1> {
                     ),
                     textAlign: TextAlign.center,
                   ),
+                  SizedBox(width: (MediaQuery.of(context).size.width/6 )+ 20,),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      IconButton(
+                      icon: Icon(
+                        MdiIcons.login,
+                        color: Colors.red,
+                        size: 40.0,
+                      ),
+                      onPressed: () {
+                        widget.signOut();
+                        Navigator.pop(context);
+                      }),
+                      Text("Logout" ,style: TextStyle(fontSize: 19 , fontWeight: FontWeight.w600)),
+                      ],
+                  )
+                   
                 ],
               ),
             ),
