@@ -3,7 +3,7 @@
 A new Flutter project.
 Pen it Down as it goes by the name is a notemaking app.
 *The logo is designed by me using Abobe Illustrator*
-![GitHub Logo](/assets/applogo.png)
+![GitHub Logo](/assets/app_logo.png)
 
 
 ## Getting Started
