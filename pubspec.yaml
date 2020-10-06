@@ -64,6 +64,11 @@ flutter:
     - assets/Todo_background.jpg
     - assets/g-logo.png
     - assets/google_logo.png
+    - assets/ss_doneScreen.png
+    - assets/ss_listScreen.png
+    - assets/ss_login.png
+    - assets/ss_pinned.png
+    - assets/ss_noteEditor.png
 
   fonts:
     - family: Roboto
