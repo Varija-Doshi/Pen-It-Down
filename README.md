@@ -4,8 +4,9 @@ A new Flutter project.
 Pen it Down as it goes by the name is a notemaking app.
 *The logo is designed by me using Abobe Illustrator*
 ![GitHub Logo](/assets/app_logo.png)
+
 A few glimpses of my project.
-![The ListScreen](/assets/ss_listScreen.png)
+![The ListScreen](/assets/ss_listScreen.png)![The doneScreen](/assets/ss_doneScreen.png)![The Pinned items in red](/assets/ss_pinned.png)![The Note Making Screen](/assets/ss_noteEditor.png)![The LoginScreen](/assets/ss_login.png)
 
 ## Getting Started
 
